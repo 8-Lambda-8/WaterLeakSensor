@@ -25,7 +25,7 @@ FS* filesystem = &LITTLEFS;
 #define DRD_TIMEOUT 10
 #define DRD_ADDRESS 0
 
-#define SENSE_PIN 4  // Für Touch: 2, 4, 12, 13, 14, 15, 27
+#define SENSE_PIN 13  // Für Touch: 2, 4, 12, 13, 14, 15, 27
 #define CONFIG_PIN 16
 
 DoubleResetDetector* drd;
@@ -324,11 +324,10 @@ void loop() {
   ArduinoOTA.handle();
   client.loop();
 
-  if ((millis() - mqttConnectMillis) > 500) {
+  if ((millis() - touchReadtMillis) > 500) {
     touch_value = touchRead(SENSE_PIN);
-    if (touch_value < 20) {
-      client.publish(str2ch(Topic + "Water"), "1", true);
-    }
+    Serial.println(touch_value);    
+    client.publish(str2ch(Topic + "Water"), (touch_value < 2)?"1":"0", true);
     touchReadtMillis = millis();
   }
 
