@@ -237,7 +237,6 @@ void setup() {
 
   ESP_WiFiManager wifiManager("WaterSensor");
 
-
   if (!readConfigFile()) {
     Serial.println(F("Can't read Config File, using default values"));
   }
@@ -267,8 +266,6 @@ void setup() {
   wifiManager.addParameter(&MQTT_SERVERPORT_FIELD);
   wifiManager.addParameter(&MQTT_USERNAME_FIELD);
   wifiManager.addParameter(&MQTT_KEY_FIELD);
-
-  
 
   drd = new DoubleResetDetector(DRD_TIMEOUT, DRD_ADDRESS);
   if (drd->detectDoubleReset()) {
@@ -326,8 +323,9 @@ void loop() {
 
   if ((millis() - touchReadtMillis) > 500) {
     touch_value = touchRead(SENSE_PIN);
-    Serial.println(touch_value);    
-    client.publish(str2ch(Topic + "Water"), (touch_value < 2)?"1":"0", true);
+    Serial.println(touch_value);
+    client.publish(str2ch(Topic + "Water"), (touch_value < 2) ? "1" : "0",
+                   true);
     touchReadtMillis = millis();
   }
 
